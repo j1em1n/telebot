@@ -1,27 +1,54 @@
+import logging
+import os
+import random
+import sys
 import telebot
-
-TOKEN = '1119831121:AAHb_nvYn1M5NciLJu1NX-48jMTkrPUZ0sc'
-
-CHAT_ID = 'https://t.me/hello_min'
-
 from apscheduler.schedulers.background import BackgroundScheduler
 
-def main():
-    """Start the bot."""
-    # Create the Updater and pass it your bot's token.
-    # Make sure to set use_context=True to use the new context based callbacks
-    # Post version 12 this will no longer be necessary
-    updater = Updater(TOKEN, use_context=True)
-    # Start the Bot
-    updater.start_webhook(listen="0.0.0.0",
-                          port=int(PORT),
-                          url_path=TOKEN)
-    updater.bot.setWebhook('https://ou7is.herokuapp.com/' + TOKEN)
+TOKEN = '1119831121:AAHb_nvYn1M5NciLJu1NX-48jMTkrPUZ0sc'
+CHAT_ID = 'https://t.me/hello_min'
+HEROKU_APP_NAME = 'https://ou7is.herokuapp.com/'
+
+from telegram.ext import Updater, CommandHandler
+
+# Enabling logging
+logging.basicConfig(level=logging.INFO,
+                    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+logger = logging.getLogger()
+
+# Getting mode, so we could define run function for local and Heroku setup
+mode = os.getenv("MODE")
+TOKEN = os.getenv(TOKEN)
+if mode == "dev":
+    def run(updater):
+        updater.start_polling()
+elif mode == "prod":
+    def run(updater):
+        PORT = int(os.environ.get("PORT", "8443"))
+        HEROKU_APP_NAME = os.environ.get(HEROKU_APP_NAME)
+        # Code from https://github.com/python-telegram-bot/python-telegram-bot/wiki/Webhooks#heroku
+        updater.start_webhook(listen="0.0.0.0",
+                              port=PORT,
+                              url_path=TOKEN)
+        updater.bot.set_webhook("https://ou7is.herokuapp.com/{}".format(HEROKU_APP_NAME, TOKEN))
+else:
+    logger.error("No MODE specified!")
+    sys.exit(1)
 
 
+def start_handler(bot, update):
+    # Creating a handler-function for /start command 
+    logger.info("User {} started bot".format(update.effective_user["id"]))
+    update.message.reply_text("Hello from Python!\nPress /random to get random number")
 
 
-def send_message(event, context):
+def random_handler(bot, update):
+    # Creating a handler-function for /random command
+    number = random.randint(0, 10)
+    logger.info("User {} randomed number {}".format(update.effective_user["id"], number))
+    update.message.reply_text("Random number: {}".format(number))
+
+def send_message(bot):
     bot = telegram.Bot(token=TOKEN)
     bot.sendMessage(chat_id = CHAT_ID, text = 'Daily reminder has been set! You\'ll get notified at 11 AM daily')
 
@@ -32,7 +59,16 @@ sched.add_job(send_message, 'cron', day_of_week='mon-fri', hour=11, minute=30, e
 
 sched.start()
 
+
 if __name__ == '__main__':
-    main()
+    logger.info("Starting bot")
+    updater = Updater(TOKEN)
+
+    updater.dispatcher.add_handler(CommandHandler("start", start_handler))
+    updater.dispatcher.add_handler(CommandHandler("random", random_handler))
+
+    run(updater)
+    
+########################
 
 
