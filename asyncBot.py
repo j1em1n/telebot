@@ -11,7 +11,7 @@ HEROKU_APP_NAME = 'https://ou7is.herokuapp.com/'
 
 bot = telebot.TeleBot(TOKEN)
 
-# from telebot import Updater, CommandHandler
+from telegram.ext import Updater, CommandHandler
 
 # Enabling logging
 logging.basicConfig(level=logging.INFO,
