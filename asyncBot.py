@@ -10,7 +10,7 @@ CHAT_ID = 'https://t.me/hello_min'
 HEROKU_APP_NAME = 'https://ou7is.herokuapp.com/'
 
 bot = telebot.TeleBot(TOKEN)
-from telegram.ext import Updater, CommandHandler
+from telebot import Updater, CommandHandler
 
 # Enabling logging
 logging.basicConfig(level=logging.INFO,
@@ -52,7 +52,7 @@ def random_handler(bot, update):
 
 @bot.message_handler(commands=["send"])
 def send_message(bot):
-    bot = telegram.Bot(token=TOKEN)
+    bot = telebot.Bot(token=TOKEN)
     bot.sendMessage(chat_id = CHAT_ID, text = 'Daily reminder has been set! You\'ll get notified at 11 AM daily')
 
 sched = BlockingScheduler()
