@@ -9,6 +9,7 @@ TOKEN = '1119831121:AAHb_nvYn1M5NciLJu1NX-48jMTkrPUZ0sc'
 CHAT_ID = 'https://t.me/hello_min'
 HEROKU_APP_NAME = 'https://ou7is.herokuapp.com/'
 
+bot = telebot.TeleBot(TOKEN)
 from telegram.ext import Updater, CommandHandler
 
 # Enabling logging
@@ -36,19 +37,20 @@ else:
     logger.error("No MODE specified!")
     sys.exit(1)
 
-
+@bot.message_handler(commands=["start"])
 def start_handler(bot, update):
     # Creating a handler-function for /start command 
     logger.info("User {} started bot".format(update.effective_user["id"]))
     update.message.reply_text("Hello from Python!\nPress /random to get random number")
 
-
+@bot.message_handler(commands=["random"])
 def random_handler(bot, update):
     # Creating a handler-function for /random command
     number = random.randint(0, 10)
     logger.info("User {} randomed number {}".format(update.effective_user["id"], number))
     update.message.reply_text("Random number: {}".format(number))
 
+@bot.message_handler(commands=["send"])
 def send_message(bot):
     bot = telegram.Bot(token=TOKEN)
     bot.sendMessage(chat_id = CHAT_ID, text = 'Daily reminder has been set! You\'ll get notified at 11 AM daily')
