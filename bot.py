@@ -1,13 +1,12 @@
 """
-Simple Bot to reply to Telegram messages taken from the python-telegram-bot examples.
 Deployed using heroku.
-Author: liuhh02 https://medium.com/@liuhh02
 """
-from asyncBot import send_message
 import requests
 import logging
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import os
+import schedule
+
 PORT = int(os.environ.get('PORT', 5000))
 
 # Enable logging
@@ -30,13 +29,12 @@ def start(update, context):
 
 
 @bot.message_handler(commands=["send"])
-def send_message(update, bot):
-    bot.sendMessage('@hello_min', 'Hello')
+def send_message(update, context):
+    update.sendMessage('@hello_min', 'Hello')
     """Echo the user message."""
-    message = 'Daily reminder has been set! You\'ll get notified at 11 AM daily')   ## Customize your message
-    update.message.reply_text(update.message.text)
+    update.message.reply_text('Daily reminder has been set! You\'ll get notified at 11 AM daily')
     
-    schedule.every().day.at("14:15").do(send_message)
+    schedule.every().day.at("14:23").do(send_message)
 
     while True:
         schedule.run_pending()
