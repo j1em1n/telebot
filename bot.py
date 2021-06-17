@@ -25,13 +25,10 @@ bot = telebot.TeleBot(TOKEN)
 
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
-# @bot.message_handler(commands=["start"])
-# def start(update, context):
-#     """Send a message when the command /start is issued."""
-#     update.message.reply_text('Hi!')
 @bot.message_handler(commands=["start"])
-def start_message(message):
-    bot.send_message(message.chat.id,f"I am a bot")
+def start(update, context):
+    """Send a message when the command /start is issued."""
+    update.message.reply_text('Hi!')
 
 @bot.message_handler(commands=["send"])
 def send(message):
