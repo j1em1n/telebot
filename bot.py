@@ -55,7 +55,7 @@ def reminder():
 
 
     
-schedule.every().day.at("12:43").do(report)
+schedule.every().day.at("12:45").do(report)
 
 while True:
     schedule.run_pending()
