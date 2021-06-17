@@ -16,7 +16,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 TOKEN = '1119831121:AAHb_nvYn1M5NciLJu1NX-48jMTkrPUZ0sc'
-CHAT_ID = 'https://t.me/hello_min'
+CHAT_ID = '474164495'
 HEROKU_APP_NAME = 'https://ou7is.herokuapp.com/'
 
 
@@ -39,18 +39,29 @@ def error(update, context):
     logger.warning('Update "%s" caused error "%s"', update, context.error)
 
 #######################
-def send_message(bot):
-    bot = telebot.Bot(token=TOKEN)
-    bot.sendMessage(chat_id = CHAT_ID, text = 'Daily reminder has been set! You\'ll get notified at 11 AM daily')
+def telegram_bot_sendtext(bot_message):
+    
+    bot_token = '1119831121:AAHb_nvYn1M5NciLJu1NX-48jMTkrPUZ0sc'
+    bot_chatID = '1119831121'
+    send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + bot_chatID + '&parse_mode=Markdown&text=' + bot_message
 
-sched = BlockingScheduler()
+    response = requests.get(send_text)
 
-# Runs from Monday to Friday at 11:30 (am) until 2014-07-30 00:00:00
-sched.add_job(send_message, 'cron', day_of_week='mon-fri', hour=12, minute=25, end_date='2021-07-30')
+    return response.json()
 
-sched.start()
+def reminder():
+    my_message = 'Daily reminder has been set! You\'ll get notified at 11 AM daily')   ## Customize your message
+    telegram_bot_sendtext(my_message)
 
-##########################
+
+    
+schedule.every().day.at("12:43").do(report)
+
+while True:
+    schedule.run_pending()
+    time.sleep(1)
+
+#########################
 
 def main():
     """Start the bot."""
