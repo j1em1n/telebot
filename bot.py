@@ -21,7 +21,7 @@ TOKEN = '1119831121:AAHb_nvYn1M5NciLJu1NX-48jMTkrPUZ0sc'
 CHAT_ID = '474164495'
 HEROKU_APP_NAME = 'https://ou7is.herokuapp.com/'
 
-bot = telebot.TeleBot(TOKEN)
+# bot = telebot.TeleBot(TOKEN)
 
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
@@ -30,9 +30,9 @@ def start(update, context):
     """Send a message when the command /start is issued."""
     update.message.reply_text('Hi! I am a bot')
 
-def send(message):
-    bot.send_message(message.chat.id,f"Daily reminder has been set! You\'ll get notified at 11 AM daily")
-    bot.send_message(message('@hello_min'),f"Hello")
+def send(update, context):
+    update.send_message(message.chat.id,f"Daily reminder has been set! You\'ll get notified at 11 AM daily")
+    update.send_message(message('@hello_min'),f"Hello")
     
     # schedule.every().day.at("12:30").do(send)
 sched = BlockingScheduler()
