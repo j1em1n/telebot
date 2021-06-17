@@ -1,1 +1,1 @@
-web: python3 asyncBot.py
+web: python3 bot.py
