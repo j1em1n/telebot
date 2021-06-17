@@ -3,7 +3,7 @@ Simple Bot to reply to Telegram messages taken from the python-telegram-bot exam
 Deployed using heroku.
 Author: liuhh02 https://medium.com/@liuhh02
 """
-
+import requests
 import logging
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import os
@@ -55,7 +55,7 @@ def reminder():
 
 
     
-schedule.every().day.at("12:45").do(report)
+schedule.every().day.at("12:54").do(report)
 
 while True:
     schedule.run_pending()
