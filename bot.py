@@ -46,7 +46,7 @@ def send_message(bot):
 sched = BlockingScheduler()
 
 # Runs from Monday to Friday at 11:30 (am) until 2014-07-30 00:00:00
-sched.add_job(send_message, 'cron', day_of_week='mon-fri', hour=11, minute=30, end_date='2021-07-30')
+sched.add_job(send_message, 'cron', day_of_week='mon-fri', hour=12, minute=25, end_date='2021-07-30')
 
 sched.start()
 
