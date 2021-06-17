@@ -38,6 +38,20 @@ def error(update, context):
     """Log Errors caused by Updates."""
     logger.warning('Update "%s" caused error "%s"', update, context.error)
 
+#######################
+def send_message(bot):
+    bot = telebot.Bot(token=TOKEN)
+    bot.sendMessage(chat_id = CHAT_ID, text = 'Daily reminder has been set! You\'ll get notified at 11 AM daily')
+
+sched = BlockingScheduler()
+
+# Runs from Monday to Friday at 11:30 (am) until 2014-07-30 00:00:00
+sched.add_job(send_message, 'cron', day_of_week='mon-fri', hour=11, minute=30, end_date='2021-07-30')
+
+sched.start()
+
+##########################
+
 def main():
     """Start the bot."""
     # Create the Updater and pass it your bot's token.
