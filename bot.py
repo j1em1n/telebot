@@ -3,6 +3,7 @@ Simple Bot to reply to Telegram messages taken from the python-telegram-bot exam
 Deployed using heroku.
 Author: liuhh02 https://medium.com/@liuhh02
 """
+from asyncBot import send_message
 import requests
 import logging
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
@@ -22,46 +23,31 @@ HEROKU_APP_NAME = 'https://ou7is.herokuapp.com/'
 
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
+@bot.message_handler(commands=["start"])
 def start(update, context):
     """Send a message when the command /start is issued."""
     update.message.reply_text('Hi!')
 
-def help(update, context):
-    """Send a message when the command /help is issued."""
-    update.message.reply_text('Help!')
 
-def echo(update, context):
+@bot.message_handler(commands=["send"])
+def send_message(update, bot):
+    bot.sendMessage('@hello_min', 'Hello')
     """Echo the user message."""
+    message = 'Daily reminder has been set! You\'ll get notified at 11 AM daily')   ## Customize your message
     update.message.reply_text(update.message.text)
+    
+    schedule.every().day.at("14:15").do(send_message)
 
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
+
+@bot.message_handler(commands=["error_log"])
 def error(update, context):
     """Log Errors caused by Updates."""
     logger.warning('Update "%s" caused error "%s"', update, context.error)
 
-#######################
-def telegram_bot_sendtext(bot_message):
-    
-    bot_token = '1119831121:AAHb_nvYn1M5NciLJu1NX-48jMTkrPUZ0sc'
-    bot_chatID = '1119831121'
-    send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + bot_chatID + '&parse_mode=Markdown&text=' + bot_message
-
-    response = requests.get(send_text)
-
-    return response.json()
-
-def reminder():
-    my_message = 'Daily reminder has been set! You\'ll get notified at 11 AM daily')   ## Customize your message
-    telegram_bot_sendtext(my_message)
-
-
-    
-schedule.every().day.at("12:54").do(report)
-
-while True:
-    schedule.run_pending()
-    time.sleep(1)
-
-#########################
+################################
 
 def main():
     """Start the bot."""
