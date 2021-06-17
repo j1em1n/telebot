@@ -31,8 +31,8 @@ def start(update, context):
     update.message.reply_text('Hi! I am a bot')
 
 def send(update, context):
-    update.send_message(message.chat.id,f"Daily reminder has been set! You\'ll get notified at 11 AM daily")
-    update.send_message(message('@hello_min'),f"Hello")
+    update.send_message('@hello_min', "Daily reminder has been set! You\'ll get notified at 11 AM daily")
+    update.message.reply_text("Hello")
     
     # schedule.every().day.at("12:30").do(send)
 sched = BlockingScheduler()
