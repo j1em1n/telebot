@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 TOKEN = '1119831121:AAHb_nvYn1M5NciLJu1NX-48jMTkrPUZ0sc'
 CHAT_ID = '474164495'
-HEROKU_APP_NAME = 'https://ou7is.herokuapp.com/'
+HEROKU_APP_NAME = 'https://zi1ch.herokuapp.com/'
 
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
