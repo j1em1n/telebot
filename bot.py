@@ -1,11 +1,13 @@
 """
 Deployed using heroku.
 """
-import requests
+import telebot
 import logging
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import os
-import schedule
+import time
+from apscheduler.schedulers.blocking import BlockingScheduler
+
 
 PORT = int(os.environ.get('PORT', 5000))
 
@@ -19,6 +21,7 @@ TOKEN = '1119831121:AAHb_nvYn1M5NciLJu1NX-48jMTkrPUZ0sc'
 CHAT_ID = '474164495'
 HEROKU_APP_NAME = 'https://ou7is.herokuapp.com/'
 
+bot = telebot.TeleBot(TOKEN)
 
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
@@ -27,18 +30,21 @@ def start(update, context):
     """Send a message when the command /start is issued."""
     update.message.reply_text('Hi!')
 
-
 @bot.message_handler(commands=["send"])
-def send_message(update, context):
-    update.sendMessage('@hello_min', 'Hello')
-    """Echo the user message."""
-    update.message.reply_text('Daily reminder has been set! You\'ll get notified at 11 AM daily')
+def send(message):
+    bot.send_message(message.chat.id,f"Daily reminder has been set! You\'ll get notified at 11 AM daily")
+    bot.send_message(message('@hello_min'),f"Hello")
     
-    schedule.every().day.at("14:23").do(send_message)
+    # schedule.every().day.at("12:30").do(send)
+sched = BlockingScheduler()
 
-    while True:
-        schedule.run_pending()
-        time.sleep(1)
+# Runs from Monday to Friday at 11:30 (am) until 2014-07-30 00:00:00
+sched.add_job(send, 'cron', day_of_week='mon-fri', hour=15, minute=07, end_date='2021-07-30')
+
+sched.start()
+    # while True:
+    #     schedule.run_pending()
+    #     time.sleep(1)
 
 @bot.message_handler(commands=["error_log"])
 def error(update, context):
@@ -56,16 +62,6 @@ def main():
 
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
-
-    # on different commands - answer in Telegram
-    dp.add_handler(CommandHandler("start", start))
-    dp.add_handler(CommandHandler("help", help))
-
-    # on noncommand i.e message - echo the message on Telegram
-    dp.add_handler(MessageHandler(Filters.text, echo))
-
-    # log all errors
-    dp.add_error_handler(error)
 
     # Start the Bot
     updater.start_webhook(listen="0.0.0.0",
