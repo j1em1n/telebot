@@ -28,7 +28,7 @@ bot = telebot.TeleBot(TOKEN)
 @bot.message_handler(commands=["start"])
 def start(update, context):
     """Send a message when the command /start is issued."""
-    update.message.reply_text('Hi!')
+    update.message.reply_text('Hi! I am a bot')
 
 @bot.message_handler(commands=["send"])
 def send(message):
