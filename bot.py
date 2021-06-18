@@ -32,15 +32,15 @@ def send(update, context):
     update.message.reply_text("Reminder sent!")
     
     # schedule.every().day.at("12:30").do(send)
-sched = BlockingScheduler()
+# sched = BlockingScheduler()
 
-# Runs from Monday to Friday at 11:30 (am) until 2014-07-30 00:00:00
-sched.add_job(send, 'cron', day_of_week='mon-fri', hour=11, minute=30, end_date='2021-07-30')
+# # Runs from Monday to Friday at 11:30 (am) until 2014-07-30 00:00:00
+# sched.add_job(send, 'cron', day_of_week='mon-fri', hour=11, minute=30, end_date='2021-07-30')
 
-sched.start()
-    # while True:
-    #     schedule.run_pending()
-    #     time.sleep(1)
+# sched.start()
+#     # while True:
+#     #     schedule.run_pending()
+#     #     time.sleep(1)
 
 ################################################
 def help(update, context):
