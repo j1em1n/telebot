@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 TOKEN = '1119831121:AAHb_nvYn1M5NciLJu1NX-48jMTkrPUZ0sc'
 CHAT_ID = '474164495'
-HEROKU_APP_NAME = 'https://ou7is.herokuapp.com/'
+HEROKU_APP_NAME = 'https://zi1ch.herokuapp.com/'
 
 # bot = telebot.TeleBot(TOKEN)
 
@@ -73,7 +73,7 @@ def main():
     updater.start_webhook(listen="0.0.0.0",
                           port=int(PORT),
                           url_path=TOKEN)
-    updater.bot.setWebhook('https://ou7is.herokuapp.com/' + TOKEN)
+    updater.bot.setWebhook('https://zi1ch.herokuapp.com/' + TOKEN)
 
     # Run the bot until you press Ctrl-C or the process receives SIGINT,
     # SIGTERM or SIGABRT. This should be used most of the time, since
