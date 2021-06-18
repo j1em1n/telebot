@@ -1,84 +1,43 @@
-"""
-Deployed using heroku.
-"""
-from apscheduler.schedulers.blocking import BlockingScheduler
-import logging
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import os
-PORT = int(os.environ.get('PORT', 5000))
-
-# Enable logging
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.INFO)
-
-logger = logging.getLogger(__name__)
+import telebot
+from flask import Flask, request
+from apscheduler.schedulers.blocking import BlockingScheduler
 
 TOKEN = '1119831121:AAHb_nvYn1M5NciLJu1NX-48jMTkrPUZ0sc'
 CHAT_ID = '474164495'
-HEROKU_APP_NAME = 'https://zi1ch.herokuapp.com/'
+HEROKU_APP_NAME = 'https://ou7is.herokuapp.com/'
 
-# Define a few command handlers. These usually take the two arguments update and
-# context. Error handlers also receive the raised TelegramError object in error.
-def start(update, context):
-    """Send a message when the command /start is issued."""
-    update.message.reply_text('Hi!')
+bot = telebot.TeleBot(token=TOKEN)
+server = Flask(__name__)
 
-def help(update, context):
-    """Send a message when the command /help is issued."""
-    update.message.reply_text('Help!')
+# Bot's Functionalities
+def sendMessage(message, text):
+   bot.send_message(message.chat.id, text)
 
-def echo(update, context):
-    """Echo the user message."""
-    update.message.reply_text(update.message.text)
+# This method will send a message formatted in HTML to the user whenever it starts the bot with the /start command, feel free to add as many commands' handlers as you want
+@bot.message_handler(commands=['start'])
+def send_info(message):
+   text = (
+   "<b>Welcome to the Medium 🤖!</b>\n"
+   "Say Hello to the bot to get a reply from it!"
+   )
+   bot.send_message(message.chat.id, text, parse_mode='HTML')
 
-def error(update, context):
-    """Log Errors caused by Updates."""
-    logger.warning('Update "%s" caused error "%s"', update, context.error)
+# This method will fire whenever the bot receives a message from a user, it will check that there is actually a not empty string in it and, in this case, it will check if there is the 'hello' word in it, if so it will reply with the message we defined
+@bot.message_handler(func=lambda msg: msg.text is not None)
+def reply_to_message(message):
+   if 'hello'in message.text.lower():
+      sendMessage(message, 'Hello! How are you doing today?')
 
-#######################################
-def send(update, context):
-    update.send_message('@hello_min', "Daily reminder has been set! You\'ll get notified at 11 AM daily")
-    update.message.reply_text("Hello")
-    
-sched = BlockingScheduler()
-
-# Runs from Monday to Friday at 11:30 (am) until 2014-07-30 00:00:00
-sched.add_job(send, 'cron', day_of_week='mon-fri', hour=15, minute=7, end_date='2021-07-30')
-
-sched.start()    
-########################################
-
-def main():
-    """Start the bot."""
-    # Create the Updater and pass it your bot's token.
-    # Make sure to set use_context=True to use the new context based callbacks
-    # Post version 12 this will no longer be necessary
-    updater = Updater(TOKEN, use_context=True)
-
-    # Get the dispatcher to register handlers
-    dp = updater.dispatcher
-
-    # on different commands - answer in Telegram
-    dp.add_handler(CommandHandler("start", start))
-    dp.add_handler(CommandHandler("help", help))
-    dp.add_handler(CommandHandler("send", send))
-
-    # on noncommand i.e message - echo the message on Telegram
-    dp.add_handler(MessageHandler(Filters.text, echo))
-
-    # log all errors
-    dp.add_error_handler(error)
-
-    # Start the Bot
-    updater.start_webhook(listen="0.0.0.0",
-                          port=int(PORT),
-                          url_path=TOKEN)
-    updater.bot.setWebhook('https://zi1ch.herokuapp.com/' + TOKEN)
-
-    # Run the bot until you press Ctrl-C or the process receives SIGINT,
-    # SIGTERM or SIGABRT. This should be used most of the time, since
-    # start_polling() is non-blocking and will stop the bot gracefully.
-    updater.idle()
-
-if __name__ == '__main__':
-    main()
+# SERVER SIDE 
+@server.route('/' + TOKEN, methods=['POST'])
+def getMessage():
+   bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
+   return "!", 200
+@server.route("/")
+def webhook():
+   bot.remove_webhook()
+   bot.set_webhook(url='https://ou7is.herokuapp.com/' + TOKEN)
+   return "!", 200
+if __name__ == "__main__":
+   server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
