@@ -5,7 +5,7 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 
 TOKEN = '1119831121:AAHb_nvYn1M5NciLJu1NX-48jMTkrPUZ0sc'
 CHAT_ID = '474164495'
-HEROKU_APP_NAME = 'https://ou7is.herokuapp.com/'
+HEROKU_APP_NAME = 'https://zi1ch.herokuapp.com/'
 
 bot = telebot.TeleBot(token=TOKEN)
 server = Flask(__name__)
@@ -37,7 +37,7 @@ def getMessage():
 @server.route("/")
 def webhook():
    bot.remove_webhook()
-   bot.set_webhook(url='https://ou7is.herokuapp.com/' + TOKEN)
+   bot.set_webhook(url='https://zi1ch.herokuapp.com/' + TOKEN)
    return "!", 200
 if __name__ == "__main__":
    server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
