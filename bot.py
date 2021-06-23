@@ -6,7 +6,9 @@ Deployed using heroku.
 
 import logging
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-from apscheduler.schedulers.blocking import BlockingScheduler
+import schedule
+import time
+
 import os
 PORT = int(os.environ.get('PORT', 5000))
 
@@ -17,7 +19,6 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 TOKEN = '1119831121:AAHb_nvYn1M5NciLJu1NX-48jMTkrPUZ0sc'
-CHAT_ID = '474164495'
 HEROKU_APP_NAME = 'https://zi1ch.herokuapp.com/'
 
 # Define a few command handlers. These usually take the two arguments update and
@@ -27,21 +28,21 @@ def start(update, context):
     update.message.reply_text('Hi!')
 
 ################################################
-def send(update, context):
-    update.send_message('@hello_min', "Daily reminder has been set! You\'ll get notified at 11 AM daily")
-    update.message.reply_text("Reminder sent!")
-    
-    # schedule.every().day.at("12:30").do(send)
-# sched = BlockingScheduler()
+def job(update, context):
+    update.send_message('@hello_min', "Hello World!")
 
-# # Runs from Monday to Friday at 11:30 (am) until 2014-07-30 00:00:00
-# sched.add_job(send, 'cron', day_of_week='mon-fri', hour=11, minute=30, end_date='2021-07-30')
+    schedule.every(10).seconds.do(job)
+    # schedule.every(10).minutes.do(job)
+    # schedule.every().hour.do(job)
+    # schedule.every().day.at("10:30").do(job)
+    # schedule.every(5).to(10).minutes.do(job)
+    # schedule.every().monday.do(job)
+    # schedule.every().wednesday.at("13:15").do(job)
+    # schedule.every().minute.at(":17").do(job)
 
-# sched.start()
-#     # while True:
-#     #     schedule.run_pending()
-#     #     time.sleep(1)
-
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
 ################################################
 def help(update, context):
     """Send a message when the command /help is issued."""
@@ -51,9 +52,6 @@ def echo(update, context):
     """Echo the user message."""
     update.message.reply_text(update.message.text)
 
-def error(update, context):
-    """Log Errors caused by Updates."""
-    logger.warning('Update "%s" caused error "%s"', update, context.error)
 
 def main():
     """Start the bot."""
@@ -68,7 +66,6 @@ def main():
     # on different commands - answer in Telegram
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("help", help))
-    dp.add_handler(CommandHandler("send", send))
 
     # on noncommand i.e message - echo the message on Telegram
     dp.add_handler(MessageHandler(Filters.text, echo))
