@@ -28,21 +28,21 @@ def start(update, context):
     update.message.reply_text('Hi!')
 
 ################################################
-def job(update, context):
-    update.send_message('@hello_min', "Hello World!")
+# def job(update, context):
+#     update.send_message('@hello_min', "Hello World!")
 
-    schedule.every(10).seconds.do(job)
-    # schedule.every(10).minutes.do(job)
-    # schedule.every().hour.do(job)
-    # schedule.every().day.at("10:30").do(job)
-    # schedule.every(5).to(10).minutes.do(job)
-    # schedule.every().monday.do(job)
-    # schedule.every().wednesday.at("13:15").do(job)
-    # schedule.every().minute.at(":17").do(job)
+#     schedule.every(10).seconds.do(job)
+#     # schedule.every(10).minutes.do(job)
+#     # schedule.every().hour.do(job)
+#     # schedule.every().day.at("10:30").do(job)
+#     # schedule.every(5).to(10).minutes.do(job)
+#     # schedule.every().monday.do(job)
+#     # schedule.every().wednesday.at("13:15").do(job)
+#     # schedule.every().minute.at(":17").do(job)
 
-    while True:
-        schedule.run_pending()
-        time.sleep(1)
+#     while True:
+#         schedule.run_pending()
+#         time.sleep(1)
 ################################################
 def help(update, context):
     """Send a message when the command /help is issued."""
@@ -70,8 +70,6 @@ def main():
     # on noncommand i.e message - echo the message on Telegram
     dp.add_handler(MessageHandler(Filters.text, echo))
 
-    # log all errors
-    dp.add_error_handler(error)
 
     # Start the Bot
     updater.start_webhook(listen="0.0.0.0",
