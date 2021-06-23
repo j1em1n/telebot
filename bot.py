@@ -28,7 +28,7 @@ def start(update, context):
 
 ################################################
 def job(update, context):
-    update.send_message(1001437924895, "Hello World!")
+    update.send_message('https://t.me/hello_min', "Hello World!")
 
     schedule.every(10).seconds.do(job)
     # schedule.every(10).minutes.do(job)
