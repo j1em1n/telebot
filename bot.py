@@ -7,6 +7,7 @@ import logging
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import schedule
 import time
+import requests
 
 import os
 PORT = int(os.environ.get('PORT', 5000))
@@ -42,6 +43,27 @@ def job(update, context):
     while True:
         schedule.run_pending()
         time.sleep(1)
+################################################
+
+def telegram_bot_sendtext(bot_message):
+    
+    bot_token = '1119831121:AAHb_nvYn1M5NciLJu1NX-48jMTkrPUZ0sc'
+    bot_chatID = '@hello_min'
+    send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + bot_chatID + '&parse_mode=Markdown&text=' + bot_message
+
+    response = requests.get(send_text)
+    return response
+    
+
+test = telegram_bot_sendtext("salut!")
+print(test)
+
+schedule.every(10).seconds.do(test)
+
+while True:
+    schedule.run_pending()
+    time.sleep(1)
+
 ################################################
 def help(update, context):
     """Send a message when the command /help is issued."""
