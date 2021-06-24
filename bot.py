@@ -55,7 +55,7 @@ def telegram_bot_sendtext(bot_message):
     return response
     
 
-test = telegram_bot_sendtext("salut!")
+test = telegram_bot_sendtext("yo, what's up!")
 print(test)
 
 schedule.every(10).seconds.do(test)
