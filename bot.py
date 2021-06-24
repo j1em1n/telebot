@@ -28,23 +28,6 @@ def start(update, context):
     update.message.reply_text('Hi!')
 
 ################################################
-def job(update, context):
-    update.send_message('@Min_96', "Hello World!")
-
-    schedule.every(10).seconds.do(job)
-    # schedule.every(10).minutes.do(job)
-    # schedule.every().hour.do(job)
-    # schedule.every().day.at("10:30").do(job)
-    # schedule.every(5).to(10).minutes.do(job)
-    # schedule.every().monday.do(job)
-    # schedule.every().wednesday.at("13:15").do(job)
-    # schedule.every().minute.at(":17").do(job)
-
-    while True:
-        schedule.run_pending()
-        time.sleep(1)
-################################################
-
 def telegram_bot_sendtext(bot_message):
     
     bot_token = '1119831121:AAHb_nvYn1M5NciLJu1NX-48jMTkrPUZ0sc'
@@ -55,10 +38,11 @@ def telegram_bot_sendtext(bot_message):
     return response
     
 
-test = telegram_bot_sendtext("yo, what's up!")
-print(test)
-
-schedule.every(10).seconds.do(test)
+test = telegram_bot_sendtext("hola!")
+# print(test)
+# schedule.every(10).seconds.do(test)
+schedule.every().day.at("15:31").do(test)
+schedule.every().day.at("20:30").do(test)
 
 while True:
     schedule.run_pending()
