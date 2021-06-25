@@ -8,12 +8,15 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import schedule
 import time
 import requests
-import arrow
-import os
+import datetime
+import pytz
+import os, time
 PORT = int(os.environ.get('PORT', 5000))
 
-utc = arrow.utcnow()
-local = utc.shift(hours=+8)
+# time.strftime('%X %x %Z')
+os.environ['TZ'] = 'Asia/Singapore'
+time.tzset()
+hour_minute = time.strftime('%H %M')
 
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -31,22 +34,25 @@ def start(update, context):
     update.message.reply_text('Hi!')
 
 ################################################
-def telegram_bot_sendtext(local, bot_message):
-    utc = arrow.utcnow()
-    local = utc.shift(hours=+8)
+def telegram_bot_sendtext(bot_message):
     bot_token = '1119831121:AAHb_nvYn1M5NciLJu1NX-48jMTkrPUZ0sc'
     bot_chatID = '@hello_min'
     send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + bot_chatID + '&parse_mode=Markdown&text=' + bot_message
 
     response = requests.get(send_text)
     return response
-    
 
-test = telegram_bot_sendtext(local, "hola!")
+# time.strftime('%X %x %Z')
+os.environ['TZ'] = 'Asia/Singapore'
+time.tzset()
+hour_minute = time.strftime('12:20')
+hour_minute1 = time.strftime('14:20')
+
+test = telegram_bot_sendtext("hola!")
 # print(test)
 # schedule.every(10).seconds.do(test)
-schedule.every().day.at("15:31").do(test)
-schedule.every().day.at("20:30").do(test)
+schedule.every().day.at(hour_minute).do(test)
+schedule.every().day.at(hour_minute1).do(test)
 
 while True:
     schedule.run_pending()
