@@ -10,13 +10,9 @@ import time
 import requests
 import datetime
 import pytz
-import os, time
+import os
 PORT = int(os.environ.get('PORT', 5000))
 
-# time.strftime('%X %x %Z')
-os.environ['TZ'] = 'Asia/Singapore'
-time.tzset()
-hour_minute = time.strftime('%H %M')
 
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -45,8 +41,8 @@ def telegram_bot_sendtext(bot_message):
 # time.strftime('%X %x %Z')
 os.environ['TZ'] = 'Asia/Singapore'
 time.tzset()
-hour_minute = time.strftime('12:20')
-hour_minute1 = time.strftime('14:20')
+hour_minute = time('12:20')
+hour_minute1 = time('14:20')
 
 test = telegram_bot_sendtext("hola!")
 # print(test)
