@@ -41,14 +41,13 @@ def telegram_bot_sendtext(bot_message):
 # time.strftime('%X %x %Z')
 os.environ['TZ'] = 'Asia/Singapore'
 time.tzset()
-hour_minute = '13:00'
-hour_minute1 ='14:20'
+hour_minute = '12:00'
+# hour_minute1 ='14:20'
 
-test = telegram_bot_sendtext("i am a bot!")
+test = telegram_bot_sendtext("Salut")
 # print(test)
 # schedule.every(10).seconds.do(test)
 schedule.every().day.at(hour_minute).do(test)
-schedule.every().day.at(hour_minute1).do(test)
 
 while True:
     schedule.run_pending()
